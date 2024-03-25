@@ -33,7 +33,7 @@
         <div class="col-12">
             <div class="mb-3">
                 <label for="content" class="form-label">Descrizione</label>
-                <textarea name="content" class="form-control @error('content') is-invalid @elseif(old('content', '')) is-valid @enderror" id="content" rows="20" required>
+                <textarea name="content" class="form-control @error('content') is-invalid @elseif(old('content', '')) is-valid @enderror" id="content" rows="30" required>
                     {{ old('content', $project->content)}}
                 </textarea>
                 @error('content')
@@ -47,7 +47,22 @@
                 @enderror
             </div>
         </div>
-        <div class="col-11">
+        <div class="col-6">
+            <label for="type_id" class="form-label">Seleziona Tipologia</label>
+            <select name="type_id" id="type_id" class="form-select @error('type_id') is-invalid @elseif(old('type_id', '')) is-valid @enderror">
+                <option value="">Nessuna</option>
+                @foreach ($types as $type)
+                    <option value="{{ $type->id }}" @if(old('type_id', $project->type?->id) == $type->id) selected @endif()>{{ $type->label }}</option>
+                @endforeach
+            </select>
+            @error('type_id')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+
+        <div class="col-5">
             <div class="mb-3">
                 <label for="image" class="form-label">Immagine</label>
                 <input type="file" class="form-control @error('image') is-invalid @elseif(old('image', '')) is-valid @enderror" name="image" id="image" placeholder="http://... o https://..." value="{{ old('image', $project->image)}}">

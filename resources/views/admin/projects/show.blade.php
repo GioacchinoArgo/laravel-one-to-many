@@ -5,7 +5,13 @@
 @section('content')
 
     <header>
-        <h1 class="mb-3"> {{ $project->title}} </h1>
+        <h1 class="mb-4"> {{ $project->title}} </h1>
+        <h4 class="fw-medium">Tipologia: @if($project->type) 
+            <span class="badge rounded-pill" style="background-color: {{ $project->type->color }}"> {{ $project->type->label }} </span> 
+            @else
+                Nessuna 
+            @endif
+        </h4>
     </header>
 
     <hr>

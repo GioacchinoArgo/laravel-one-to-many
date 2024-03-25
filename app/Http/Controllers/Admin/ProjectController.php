@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use App\Models\Type;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Arr;
 
@@ -27,7 +28,8 @@ class ProjectController extends Controller
     public function create()
     {
         $project = new Project();
-        return view('admin.projects.create', compact('project'));
+        $types = Type::select('label', 'id')->get();
+        return view('admin.projects.create', compact('project', 'types'));
     }
 
     /**
@@ -39,7 +41,8 @@ class ProjectController extends Controller
             [
                 'title' => 'required|string|min:5|max:20|unique:projects',
                 'content' => 'required|string',
-                'image' => 'nullable|image|mimes:png,jpg,jpeg'
+                'image' => 'nullable|image|mimes:png,jpg,jpeg',
+                'type_id' => 'nullable|exists:types,id'
             ],
             [
                 'title.required' => 'Il titolo è obbligatorio',
@@ -48,7 +51,8 @@ class ProjectController extends Controller
                 'title.unique' => 'Esiste già un progetto con questo titolo',
                 'content.required' => 'La descrizione del progetto è obbligatoria',
                 'image.image' => 'Il file inserito non è un\'immagine',
-                'image.mimes' => 'Le estensioni valide sono: .png, .jpg, .jpeg'
+                'image.mimes' => 'Le estensioni valide sono: .png, .jpg, .jpeg',
+                'type_id.exists' => 'Tipologia non valida o non esistente'
             ]
         );
 
@@ -83,7 +87,8 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('admin.projects.edit', compact('project'));
+        $types = Type::select('label', 'id')->get();
+        return view('admin.projects.edit', compact('project', 'types'));
     }
 
     /**
@@ -95,7 +100,8 @@ class ProjectController extends Controller
             [
                 'title' => ['required', 'string', 'min:5', 'max:20', Rule::unique('projects')->ignore($project->id)],
                 'content' => 'required|string',
-                'image' => 'nullable|image|mimes:png,jpg,jpeg'
+                'image' => 'nullable|image|mimes:png,jpg,jpeg',
+                'type_id' => 'nullable|exists:types,id'
             ],
             [
                 'title.required' => 'Il titolo è obbligatorio',
@@ -104,7 +110,8 @@ class ProjectController extends Controller
                 'title.unique' => 'Esiste già un progetto con questo titolo',
                 'content.required' => 'La descrizione del progetto è obbligatoria',
                 'image.image' => 'Il file inserito non è un\'immagine',
-                'image.mimes' => 'Le estensioni valide sono: .png, .jpg, .jpeg'
+                'image.mimes' => 'Le estensioni valide sono: .png, .jpg, .jpeg',
+                'type_id.exists' => 'Tipologia non valida o non esistente'
             ]
         );
         $data = $request->all();

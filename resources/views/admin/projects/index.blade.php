@@ -13,6 +13,7 @@
             <tr class="align-middle text-center">
                 <th scope="col">#</th>
                 <th scope="col">Titolo</th>
+                <th scope="col">Tipologia</th>
                 <th scope="col">Slug</th>
                 <th scope="col">Creato il</th>
                 <th scope="col">Ultima modifica</th>
@@ -34,6 +35,13 @@
             <tr class="align-middle text-center">
                 <th scope="row">{{$project->id}}</th>
                 <td>{{$project->title}}</td>
+                <td>
+                    @if($project->type) 
+                        <span class="badge rounded-pill" style="background-color: {{ $project->type->color }}"> {{ $project->type->label }} </span> 
+                    @else
+                        Nessuna 
+                    @endif
+                </td>
                 <td>{{$project->slug}}</td>
                 <td>{{$project->created_at}}</td>
                 <td>{{$project->updated_at}}</td>
@@ -58,7 +66,7 @@
             </tr>
         @empty 
             <tr>
-                <td colspan="6">
+                <td colspan="7">
                     <h3 class="text-center">Non ci sono progetti</h3>
                 </td>
             </tr>
